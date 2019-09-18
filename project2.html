@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMC 6310 Project 2 Team Facepalm</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <script src="js/p5.min.js"></script>
+    <script src="js/p5.dom.min.js"></script>
+    <script src="js/p5.sound.min.js"></script>
+    <script src="js/sketch.js"></script>
+    <script src="https://download.affectiva.com/js/3.2.1/affdex.js"></script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div>
+        <button id="detector-start">Start</button>
+        <button id="detector-stop">Stop</button>
+    </div>
+    <div class="affectivaTest" id="affdex_elements"></div>
+    <div id="results">
+        Click Start.
+    </div>
+    <div id="results-max">
+    </div>
+
+</body>
+
+<script>
+
+    /*
+   SDK Needs to create video and canvas nodes in the DOM in order to function
+   Here we are adding those nodes a predefined div.
+    */
+    var divRoot = $("#affdex_elements")[0];
+
+    // The captured frame's width in pixels
+    var width = 640;
+
+    // The captured frame's height in pixels
+    var height = 480;
+
+    /*
+       Face detector configuration - If not specified, defaults to
+       affdex.FaceDetectorMode.LARGE_FACES
+       affdex.FaceDetectorMode.LARGE_FACES=Faces occupying large portions of the frame
+       affdex.FaceDetectorMode.SMALL_FACES=Faces occupying small portions of the frame
+    */
+    var faceMode = affdex.FaceDetectorMode.LARGE_FACES;
+
+    //Construct a CameraDetector and specify the image width / height and face detector mode.
+    var detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
+    //detector.addEventListener("onInitializeSuccess", function () { });
+    //detector.addEventListener("onInitializeFailure", function () { });
+
+    function a_log(node_name, msg) {
+        $(node_name).append("<span>" + msg + "</span><br />")
+    }
+
+    var color_joy = "#E7CB7A";
+    var color_anger = "#CC3C4B";
+    var color_contempt = "#D77883";
+    var color_disgust = "#D76D96";
+    var color_surprise = "#00A5CD";
+    var color_sadness = "#3673AC";
+    var color_fear = "#53995C";
+    var color_none = "#FFFFFF"
+
+
+
+    function cleanEmotion(emotions) {
+        return _.pick(emotions, "joy", "sadness", "disgust", "contempt", "anger", "fear", "surprise");
+    }
+    function findMax(emotions) {
+        maxEmotion.emotion = _.max(Object.keys(emotions), o => emotions[o]);
+        maxEmotion.value = 0;
+        emotions[maxEmotion.emotion] == 0 ? maxEmotion.emotion = "none" : maxEmotion.value = emotions[maxEmotion.emotion];
+    }
+
+    //detector.detectAllExpressions();
+    detector.detectAllEmotions();
+    //detector.detectAllEmojis();
+    //detector.detectAllAppearance();
+
+    detector.addEventListener("onInitializeSuccess", function () {
+        //Display canvas instead of video feed because we want to draw the feature points on it
+        $("#face_video_canvas").css("display", "block");
+        $("#face_video").css("display", "none");
+    });
+
+    detector.addEventListener("onImageResultsSuccess", function (faces, image, timestamp) {
+        $('#results').html("");
+        $('#results-max').html("");
+        a_log('#results', "Timestamp: " + timestamp.toFixed(2));
+        a_log('#results', "Number of faces found: " + faces.length);
+        if (faces.length > 0) {
+            findMax(cleanEmotion(faces[0].emotions));
+            a_log('#results', "Emotions: " + JSON.stringify(cleanEmotion(faces[0].emotions), function (key, val) {
+                return val.toFixed ? Number(val.toFixed(0)) : val;
+            }));
+            a_log('#results-max', "Max: " + maxEmotion.emotion + " : " + maxEmotion.value.toFixed(0))
+
+        } else {
+            $('#results').html("No face detected");
+        }
+    });
+
+    $("#detector-start").on("click", () => {
+        if (detector && !detector.isRunning) {
+            detector.start();
+        }
+    })
+
+    $("#detector-stop").on("click", () => {
+        if (detector && detector.isRunning) {
+            detector.removeEventListener();
+            detector.stop();
+        }
+    })
+
+    /*
+    function setup() {
+        createCanvas(400, 400);
+        background(222);
+    }
+
+    function draw() {
+        ellipse(100, 200, 50, 50);
+        createp
+    }*/
+</script>
+
+</html>
