@@ -1,6 +1,6 @@
 var maxEmotion = {
     "emotion": "none",
-    "value": 0
+    "value": 100
 };
 
 var color_joy = "#E7CB7A";
@@ -13,83 +13,92 @@ var color_fear = "#53995C";
 var color_none = "#FFFFFF";
 
 function setup() {
-    createCanvas(710, 400, WEBGL);
+    createCanvas(windowWidth, windowHeight);
+    background(10);
 }
 
 function getColor(emotion) {
     switch (maxEmotion.emotion) {
         case "joy":
-            return color_joy;
+            return color(231, 203, 122, maxEmotion.value / 100 * 255);
         case "anger":
-            return color_anger;
+            return color(204, 60, 75, maxEmotion.value / 100 * 255);
         case "contempt":
-            return color_contempt;
+            return color(215, 120, 131, maxEmotion.value / 100 * 255);
         case "disgust":
-            return color_disgust;
+            return color(215, 109, 150, maxEmotion.value / 100 * 255);
         case "surprise":
-            return color_surprise;
+            return color(0, 165, 205, maxEmotion.value / 100 * 255);
         case "sadness":
-            return color_sadness;
+            return color(54, 115, 172, maxEmotion.value / 100 * 255);
         case "fear":
-            return color_fear;
+            return color(83, 153, 92, maxEmotion.value / 100 * 255);
         default:
-            return color_none;
+            return color(255, 255, 255, maxEmotion.value / 100 * 255);
     }
 }
 
 function draw() {
-    background(250);
-    fill(getColor(maxEmotion));
-    square(50, 50, 100, 100);
+    splashDot();
+}
 
-    /*
+function mousePressed() {
     
-    translate(-240, -100, 0);
-    normalMaterial();
-    push();
-    rotateZ(frameCount * 0.01);
-    rotateX(frameCount * 0.01);
-    rotateY(frameCount * 0.01);
-    plane(70);
-    pop();
+    //splashDot();
+    // prevent default
+    return false;
+}
 
-    translate(240, 0, 0);
-    push();
-    rotateZ(frameCount * 0.01);
-    rotateX(frameCount * 0.01);
-    rotateY(frameCount * 0.01);
-    box(70, 70, 70);
-    pop();
+function splashDot() {
+    fill(getColor(maxEmotion));
+    noStroke();  // Don't draw a stroke around shapes
+    var size = maxEmotion.value / 100 * 255,
+        offsetX,
+        offsetY,
+        plusOrMinus;
 
-    translate(240, 0, 0);
-    push();
-    rotateZ(frameCount * 0.01);
-    rotateX(frameCount * 0.01);
-    rotateY(frameCount * 0.01);
-    cylinder(70, 70);
-    pop();
+    var locX = random(0, width);
+    var locY = random(0, height);
+    ellipse(locX, locY, size, size);
+    for (var i = 0; i < 10; i++) {
+        plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+        offsetX = (random(size)) * plusOrMinus;
+        plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+        offsetY = (random(size)) * plusOrMinus;
+        var newSize = random(size) / 2;
+        ellipse(locX + offsetX, locY + offsetY, newSize, newSize);
+        //console.log(floor(randomGaussian(0, 15)));
+    }
+}
 
-    translate(-240 * 2, 200, 0);
-    push();
-    rotateZ(frameCount * 0.01);
-    rotateX(frameCount * 0.01);
-    rotateY(frameCount * 0.01);
-    cone(70, 70);
-    pop();
-    translate(240, 0, 0);
-    push();
-    rotateZ(frameCount * 0.01);
-    rotateX(frameCount * 0.01);
-    rotateY(frameCount * 0.01);
-    torus(70, 20);
-    pop();
+function splashLine() {
+    fill(getColor(maxEmotion));
+    noStroke();  // Don't draw a stroke around shapes
+    var size = maxEmotion.value / 100 * 255,
+        offsetX,
+        offsetY,
+        plusOrMinus;
+    ellipse(mouseX, mouseY, size, size);
+    for (var i = 0; i < 10; i++) {
+        plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+        offsetX = (random(size)) * plusOrMinus;
+        plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+        offsetY = (random(size)) * plusOrMinus;
+        var newSize = random(size) / 2;
+        ellipse(mouseX + offsetX, mouseY + offsetY, newSize, newSize);
+        //console.log(floor(randomGaussian(0, 15)));
+    }
+}
 
-    translate(240, 0, 0);
-    push();
-    rotateZ(frameCount * 0.01);
-    rotateX(frameCount * 0.01);
-    rotateY(frameCount * 0.01);
-    sphere(70);
-    pop();
-    */
+/*
+function getColor() {
+    var rRed = Math.floor((Math.random() * 255) + 1),
+        rBlue = Math.floor((Math.random() * 255) + 1),
+        rGreen = Math.floor((Math.random() * 255) + 1);
+    return color(rRed, rBlue, rGreen, 255);
+}
+*/
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
 }

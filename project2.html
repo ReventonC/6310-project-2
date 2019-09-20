@@ -22,17 +22,19 @@
 </head>
 
 <body>
-    <div>
-        <button id="detector-start">Start</button>
-        <button id="detector-stop">Stop</button>
+    <div style="position: fixed">
+        <div>
+            <button id="detector-start">Start</button>
+            <button id="detector-stop">Stop</button>
+        </div>
+        <div class="affectivaTest" style="display: none" id="affdex_elements"></div>
+        <div id="results">
+            Click Start.
+        </div>
+        <div id="results-max">
+        </div>
     </div>
-    <div class="affectivaTest" id="affdex_elements"></div>
-    <div id="results">
-        Click Start.
-    </div>
-    <div id="results-max">
-    </div>
-
+    
 </body>
 
 <script>
@@ -65,17 +67,6 @@
     function a_log(node_name, msg) {
         $(node_name).append("<span>" + msg + "</span><br />")
     }
-
-    var color_joy = "#E7CB7A";
-    var color_anger = "#CC3C4B";
-    var color_contempt = "#D77883";
-    var color_disgust = "#D76D96";
-    var color_surprise = "#00A5CD";
-    var color_sadness = "#3673AC";
-    var color_fear = "#53995C";
-    var color_none = "#FFFFFF"
-
-
 
     function cleanEmotion(emotions) {
         return _.pick(emotions, "joy", "sadness", "disgust", "contempt", "anger", "fear", "surprise");
@@ -115,6 +106,7 @@
     });
 
     $("#detector-start").on("click", () => {
+        $('#results').html("Initializing... Please wait");
         if (detector && !detector.isRunning) {
             detector.start();
         }
