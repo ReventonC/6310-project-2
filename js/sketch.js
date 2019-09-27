@@ -3,47 +3,50 @@ var maxEmotion = {
     "value": 100
 };
 
-var color_joy = "#E7CB7A";
-var color_anger = "#CC3C4B";
-var color_contempt = "#D77883";
-var color_disgust = "#D76D96";
-var color_surprise = "#00A5CD";
-var color_sadness = "#3673AC";
-var color_fear = "#53995C";
-var color_none = "#FFFFFF";
+var color_joy = ["#FF7337", "#FF8A00", "#FFBB55"];
+var color_anger = ["#E40000", "#FF5353", "#FF9B9B"];
+var color_contempt = ["#878787", "#D4D4D4", "#F4F4F4"];
+var color_disgust = ["#53995C", "#3FC250", "#B4DEB9"];
+var color_surprise = ["#FFD600", "#FFE662", "#FDFFAF"];
+var color_sadness = ["#0044A9", "#5E8BCE", "#B9D5FF"];
+var color_fear = ["#7D00A9", "#A466BA", "#E0A9F3"];
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
-    background(10);
+    var myCanvas = createCanvas($("#sketch-div").width(), $("#sketch-div").height());
+    myCanvas.parent("sketch-div");
+    background(255);
+    frameRate(5);
 }
 
 function getColor(emotion) {
+    if (maxEmotion.value <= 10) return color("#FFFFFF");
     switch (maxEmotion.emotion) {
         case "joy":
-            return color(231, 203, 122, maxEmotion.value / 100 * 255);
+            return (maxEmotion.value > 70? color_joy[0] : maxEmotion.value > 40 ? color_joy[1] : color_joy[2]);
         case "anger":
-            return color(204, 60, 75, maxEmotion.value / 100 * 255);
+            return (maxEmotion.value > 70? color_anger[0] : maxEmotion.value > 40 ? color_anger[1] : color_anger[2]);
         case "contempt":
-            return color(215, 120, 131, maxEmotion.value / 100 * 255);
+            return (maxEmotion.value > 70? color_contempt[0] : maxEmotion.value > 40 ? color_contempt[1] : color_contempt[2]);
         case "disgust":
-            return color(215, 109, 150, maxEmotion.value / 100 * 255);
+            return (maxEmotion.value > 70? color_disgust[0] : maxEmotion.value > 40 ? color_disgust[1] : color_disgust[2]);
         case "surprise":
-            return color(0, 165, 205, maxEmotion.value / 100 * 255);
+            return (maxEmotion.value > 70? color_surprise[0] : maxEmotion.value > 40 ? color_surprise[1] : color_surprise[2]);
         case "sadness":
-            return color(54, 115, 172, maxEmotion.value / 100 * 255);
+            return (maxEmotion.value > 70? color_sadness[0] : maxEmotion.value > 40 ? color_sadness[1] : color_sadness[2]);
         case "fear":
-            return color(83, 153, 92, maxEmotion.value / 100 * 255);
+            return (maxEmotion.value > 70? color_fear[0] : maxEmotion.value > 40 ? color_fear[1] : color_fear[2]);
         default:
-            return color(255, 255, 255, maxEmotion.value / 100 * 255);
+            return color("#FFFFFF");
     }
 }
 
 function draw() {
+    //resizeCanvas($("#sketch-div").width(), $("#sketch-div").height(), true);
     splashDot();
 }
 
 function mousePressed() {
-    
+
     //splashDot();
     // prevent default
     return false;
@@ -52,7 +55,7 @@ function mousePressed() {
 function splashDot() {
     fill(getColor(maxEmotion));
     noStroke();  // Don't draw a stroke around shapes
-    var size = maxEmotion.value / 100 * 255,
+    var size = (maxEmotion.value > 50 ? maxEmotion.value : 50) / 400 * 255,
         offsetX,
         offsetY,
         plusOrMinus;
