@@ -65,7 +65,8 @@ function draw() {
         sign = false;
         noStroke();
         fill(0);
-        text(name, 50, 50);
+        textSize(18);
+        text(name, width - 200, height -40);
     }
 
     if (detector.isRunning && hasFace) {
