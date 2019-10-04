@@ -24,7 +24,20 @@ canvas {
   z-index: -5;
 }
 
+#rectangular-cat {
+  width: 300px;
+  left: -50px;
+  top: 5vh;
+  z-index: -5;
+}
+
 #Oval-Frame {
+  width: 350px;
+  left: -50px;
+  top: 35vh;
+  z-index: -5;
+}
+#Oval-Frame-cat {
   width: 350px;
   left: -50px;
   top: 35vh;
@@ -32,6 +45,12 @@ canvas {
 }
 
 #Round-Frame {
+  width: 550px;
+  right: -250px;
+  top: 10vh;
+  z-index: -5;
+}
+#Round-Frame-cat {
   width: 550px;
   right: -250px;
   top: 10vh;
