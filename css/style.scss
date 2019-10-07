@@ -21,9 +21,11 @@ canvas {
 
 .btn {
     cursor: pointer;
-    background-color: antiquewhite;
+    //background-color: antiquewhite;
     border-radius: 10px;
+    border: solid 10px transparent;
     padding: 0 20px;
+    border-image: url("https://i.ibb.co/MsDXPQQ/Button-frame.png");
 }
 
 .affectivaTest {
@@ -170,7 +172,7 @@ canvas {
 }
 
 #heptagon {
-    opacity: 0;
+    opacity: 1;
     position: fixed;
     width: 550px;
     height: 550px;
@@ -190,6 +192,7 @@ canvas {
 }
 
 #emoList {
+    opacity: 0;
     position: fixed;
     width: 350px;
     height: 430px;

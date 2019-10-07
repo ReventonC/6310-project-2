@@ -41,8 +41,14 @@
         <div id="UI-frame">
             <div id="UI-div">
                 <p>Enter your name:</p>
-                <input id="name-input" type="text" autofocus>
+                <input id="name-input" type="text" >
                 <span class="btn" id="btn-start">Start</span>
+
+                <script>
+                    $('input').on('click', ()=> {
+                        $('input').focus();
+                    })
+                </script>
             </div>
         </div>
     </div>
@@ -55,24 +61,31 @@
 
     <script>
 
-
         $('#btn-save').on('click', () => {
             save('myCanvas.jpg');
         })
+
+        function showAll() {
+            $(".affectivaTest").css("opacity", "1")
+            $("#heptagon").css("opacity", "1")
+            $("#emoList").css("opacity", "1")
+        }
+        function hideAll() {
+            $(".affectivaTest").css("opacity", "0")
+            $("#heptagon").css("opacity", "0")
+            $("#emoList").css("opacity", "0")
+        }
 
         var isShown = false;
         $('#btn-show').on('click', () => {
             if (!isShown) {
                 isShown = true;
                 $('#btn-show').text("Hide");
-                $(".affectivaTest").css("opacity", "1")
-                $("#heptagon").css("opacity", "1")
-
+                showAll();
             } else {
                 isShown = false;
                 $('#btn-show').text("Show");
-                $(".affectivaTest").css("opacity", "0")
-                $("#heptagon").css("opacity", "0")
+                hideAll();
             }
         })
 
@@ -132,19 +145,66 @@
     </div>
 
     <script>
+        const TEXTSPREAD = 25;
+        var a, b, c, d, e, f, g;
+        var emotionText = ["anger", "surprise", "joy", "sadness", "contempt", "disgust", "fear"];
+        var strokeColor = ["#E40000", "#FFD600", "#FF7337", "#0044A9", "#878787", "#53995C", "#7D00A9"];
+
+        // var strokeColor2 = ['red', 'yellow', 'orange', 'white', 'blue', 'purple', 'grey', 'green'];
+        var hepx = 500;
+        var hepy = 500;
         var heptagon = (p) => {
-            var x = 200;
-            var y = 200;
+            p.preload = () => {
+                font = loadFont('assets/CabinSketch-Regular.ttf');
+            }
             p.setup = () => {
-                p.createCanvas(525, 525);
+                p.createCanvas(hepx, hepy);
+                p.textFont(font);
+                p.frameRate(5);
+                p.strokeWeight(5);
             }
             p.draw = () => {
-                p.background(0);
-                p.fill(255);
-                p.rect(x, y, 50, 50);
+                emotion = [emoResults.anger, emoResults.surprise, emoResults.joy, emoResults.sadness, emoResults.contempt, emoResults.disgust, emoResults.fear];
+                p.clear();
+                p.background('rgba(0,0,0,0.7)');
+                p.translate(p.width * 0.5-100, p.height * 0.5);
+                p.polygon(0, 0, 60, 7);
+            }
+            p.polygon = (x, y, radius, npoints) => {
+                let angle = p.TWO_PI / npoints;
+                p.fill('rgba(255,255,255,0.5)');
+                p.noStroke();
+                // create 7-gon outline
+                p.beginShape();
+                for (let an = 0; an < p.TWO_PI; an += angle) {
+                    let sx = x + p.cos(an) * radius;
+                    let sy = y + p.sin(an) * radius;
+                    p.vertex(sx, sy);
+                }
+                p.endShape(p.CLOSE);
+                //create data-based vis
+                var i = 0;
+                p.beginShape();
+                for (let an = 0; an < p.TWO_PI, i < npoints; an += angle) {
+                    let sxText = x + p.cos(an) * (radius + TEXTSPREAD);
+                    let syText = y + p.sin(an) * (radius + TEXTSPREAD);
+                    p.noStroke();
+                    p.textSize(16);
+                    p.textAlign(p.CENTER, p.CENTER);
+                    p.fill(strokeColor[i]);
+                    p.text(emotionText[i], sxText, syText);
+
+                    p.stroke(strokeColor[i]);
+                    let sx = x + p.cos(an) * radius;
+                    let sy = y + p.sin(an) * radius;
+                    // stroke(strokeColor[i]);
+                    p.fill(strokeColor[i]);
+                    p.line(sx * emotion[i] / 100, sy * emotion[i] / 100, 0, 0);
+                    i++;
+                    p.endShape(p.CLOSE);
+                }
             }
         }
-
         new p5(heptagon, document.getElementById("heptagon"));
 
         var emoList = (p) => {
@@ -155,14 +215,14 @@
             }
             p.setup = () => {
                 p.createCanvas(325, 400);
-                p.background('rgba(255,255,255,0.7)');
+                p.background('rgba(0,0,0,0.7)');
                 p.textFont(font);
                 p.textSize(30);
                 p.frameRate(5);
             }
             p.draw = () => {
                 p.clear();
-                p.background('rgba(255,255,255,0.7)');
+                p.background('rgba(0,0,0,0.7)');
                 p.noStroke();
                 p.fill(0);
                 let x = 80;
@@ -189,7 +249,6 @@
 
 
     </script>
-
 </body>
 
 <script>
