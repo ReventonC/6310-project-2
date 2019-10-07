@@ -25,7 +25,6 @@
 
 <body>
     <div class="affectiva-container">
-        <div class="affectivaTest" style="display: none" id="affdex_elements"></div>
         <div id="results">
         </div>
         <div id="results-max">
@@ -43,43 +42,153 @@
             <div id="UI-div">
                 <p>Enter your name:</p>
                 <input id="name-input" type="text" autofocus>
-                <button id="detector-start">Start</button>
+                <span class="btn" id="btn-start">Start</span>
             </div>
         </div>
     </div>
 
 
-    <button id="detector-stop">Stop</button>
-    <button id="btn-show">Show</button>
-    <button id="btn-restart">Restart</button>
-    <button id="btn-save">Save Result</button>
+    <span class="btn" id="btn-stop">Stop</span>
+    <span class="btn" id="btn-show">Show</span>
+    <span class="btn" id="btn-restart">Restart</span>
+    <span class="btn" id="btn-save">Save</span>
 
     <script>
+
+
         $('#btn-save').on('click', () => {
             save('myCanvas.jpg');
         })
 
+        var isShown = false;
         $('#btn-show').on('click', () => {
+            if (!isShown) {
+                isShown = true;
+                $('#btn-show').text("Hide");
+                $(".affectivaTest").css("opacity", "1")
+                $("#heptagon").css("opacity", "1")
 
+            } else {
+                isShown = false;
+                $('#btn-show').text("Show");
+                $(".affectivaTest").css("opacity", "0")
+                $("#heptagon").css("opacity", "0")
+            }
+        })
+
+        $("#btn-start").on("click", () => {
+            name = $("#UI-div input").val();
+            if (name.trim() == "") {
+                alert("Please enter your name! ");
+            } else {
+
+                $("#btn-stop").show();
+                $("#btn-show").show();
+                $('#results').html("Initializing... Please wait");
+                $('#UI-container').hide();
+                $()
+                if (detector && !detector.isRunning) {
+                    detector.start();
+                }
+            }
+        })
+
+        $("#btn-stop").on("click", () => {
+            if (detector && detector.isRunning) {
+
+                $("#btn-restart").show();
+                $("#btn-save").show();
+                $("#btn-stop").hide();
+                $("#btn-show").hide();
+                sign = true;
+                detector.removeEventListener();
+                detector.stop();
+            }
+        })
+
+        $("#btn-restart").on("click", () => {
+            detector.start();
+            clear();
+            setup();
         })
     </script>
 
     <div id="img-container">
-        <img src="https://i.ibb.co/ZMMKNcH/Oval-Frame-cat.png" id="Oval-Frame-cat" border="0">
-        <img src="https://i.ibb.co/QCyN6Gr/Oval-Frame-frame.png" id="Oval-Frame" border="0">
-        <img src="https://i.ibb.co/NSjR1VX/rectangular-cat.png" id="rectangular-cat" border="0">
-        <img src="https://i.ibb.co/1rqMjyH/rectangular-frame.png" id="rectangular" border="0">
-        <img src="https://i.ibb.co/CBdrWcL/Round-Frame-frame.png" id="Round-Frame" border="0">
-        <img src="https://i.ibb.co/VCLJkjw/Round-Frame-cat.png" id="Round-Frame-cat" border="0">
+        <img src="https://i.ibb.co/ZMMKNcH/Oval-Frame-cat.png" class="oval cat" border="0">
+        <div id="emoList" class="oval canvas"></div>
+        <img src="https://i.ibb.co/QCyN6Gr/Oval-Frame-frame.png" class="oval frame" border="0">
 
+        <img src="https://i.ibb.co/NSjR1VX/rectangular-cat.png" class="rectangular cat" border="0">
+        <div class="affectivaTest rectangular canvas" id="affdex_elements"></div>
+        <img src="https://i.ibb.co/1rqMjyH/rectangular-frame.png" class="rectangular frame" border="0">
 
+        <img src="https://i.ibb.co/CBdrWcL/Round-Frame-frame.png" class="round frame" border="0">
+        <div id="heptagon" class="round canvas"></div>
+        <img src="https://i.ibb.co/VCLJkjw/Round-Frame-cat.png" class="round cat" border="0">
 
         <img src="https://i.ibb.co/DGRrB95/line.png" id="line">
         <img src="https://i.ibb.co/q717ntv/boy.png" id="boy" border="0">
         <img src="https://i.ibb.co/GR3zyzs/girl.png" id="girl" border="0">
-
-
     </div>
+
+    <script>
+        var heptagon = (p) => {
+            var x = 200;
+            var y = 200;
+            p.setup = () => {
+                p.createCanvas(525, 525);
+            }
+            p.draw = () => {
+                p.background(0);
+                p.fill(255);
+                p.rect(x, y, 50, 50);
+            }
+        }
+
+        new p5(heptagon, document.getElementById("heptagon"));
+
+        var emoList = (p) => {
+            var x = 200;
+            var y = 200;
+            p.preload = () => {
+                font = loadFont('assets/CabinSketch-Regular.ttf');
+            }
+            p.setup = () => {
+                p.createCanvas(325, 400);
+                p.background('rgba(255,255,255,0.7)');
+                p.textFont(font);
+                p.textSize(30);
+                p.frameRate(5);
+            }
+            p.draw = () => {
+                p.clear();
+                p.background('rgba(255,255,255,0.7)');
+                p.noStroke();
+                p.fill(0);
+                let x = 80;
+                let y = 120;
+                let y_inc = 30;
+                p.fill(color("#FF7337"));
+                p.text("Joy: " + emoResults.joy + "%", x, y);
+                p.fill(color("#0044A9"));
+                p.text("Sadness: " + emoResults.sadness + "%", x, y + y_inc);
+                p.fill(color("#53995C"));
+                p.text("Disgust: " + emoResults.disgust + "%", x, y + 2 * y_inc);
+                p.fill(color("#878787"));
+                p.text("Contempt: " + emoResults.contempt + "%", x, y + 3 * y_inc);
+                p.fill(color("#E40000"));
+                p.text("Anger: " + emoResults.anger + "%", x, y + 4 * y_inc);
+                p.fill(color("#7D00A9"));
+                p.text("Fear: " + emoResults.fear + "%", x, y + 5 * y_inc);
+                p.fill(color("#FFD600"));
+                p.text("Surprise: " + emoResults.surprise + "%", x, y + 6 * y_inc);
+            }
+        }
+
+        new p5(emoList, document.getElementById("emoList"));
+
+
+    </script>
 
 </body>
 
@@ -88,6 +197,15 @@
     var name = "";
     var sign = false;
     var hasFace = false;
+    var emoResults = {
+        "joy": 0,
+        "sadness": 0,
+        "disgust": 0,
+        "contempt": 0,
+        "anger": 0,
+        "fear": 0,
+        "surprise": 0
+    };
     /*
    SDK Needs to create video and canvas nodes in the DOM in order to function
    Here we are adding those nodes a predefined div.
@@ -139,6 +257,13 @@
     function cleanEmotion(emotions) {
         return _.pick(emotions, "joy", "sadness", "disgust", "contempt", "anger", "fear", "surprise");
     }
+
+    function percentEmotion(emotions) {
+        var sum = 0
+        _.mapObject(emotions, (v, k) => sum += v)
+        return _.mapObject(emotions, (v, k) => (v / sum * 100).toFixed(0));
+    }
+
     function findMax(emotions) {
         maxEmotion.emotion = _.max(Object.keys(emotions), o => emotions[o]);
         maxEmotion.value = 0;
@@ -152,17 +277,20 @@
 
     detector.addEventListener("onInitializeSuccess", function () {
         //Display canvas instead of video feed because we want to draw the feature points on it
-        $("#face_video_canvas").css("display", "block");
-        $("#face_video").css("display", "none");
+        $("#face_video").css("display", "relative").addClass("rectangular canvas");
+
     });
+
+
 
     detector.addEventListener("onImageResultsSuccess", function (faces, image, timestamp) {
         $('#results').html("");
         $('#results-max').html("");
-        //a_log('#results', "Timestamp: " + timestamp.toFixed(2));
+        //a_log('#results', "Timestamp: " + timestamp );
         //a_log('#results', "Number of faces found: " + faces.length);
         if (faces.length > 0) {
             hasFace = true;
+            emoResults = percentEmotion(cleanEmotion(faces[0].emotions));
             findMax(cleanEmotion(faces[0].emotions));
             a_log('#results', "Emotions: " + JSON.stringify(cleanEmotion(faces[0].emotions), function (key, val) {
                 return val.toFixed ? Number(val.toFixed(0)) : val;
@@ -175,28 +303,6 @@
             $('#results').html("No face detected");
         }
     });
-
-    $("#detector-start").on("click", () => {
-        name = $("#UI-div input").val();
-        if (name.trim() == "") {
-            alert("Please enter your name! ");
-        } else {
-            $('#results').html("Initializing... Please wait");
-            $('#UI-container').hide();
-            if (detector && !detector.isRunning) {
-                detector.start();
-            }
-        }
-    })
-
-    $("#detector-stop").on("click", () => {
-        if (detector && detector.isRunning) {
-            sign = true;
-            detector.removeEventListener();
-            detector.stop();
-        }
-    })
-
     /*
     function setup() {
         createCanvas(400, 400);

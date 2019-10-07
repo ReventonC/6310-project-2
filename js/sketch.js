@@ -66,7 +66,7 @@ function draw() {
         noStroke();
         fill(0);
         textSize(18);
-        text(name, width - 200, height -40);
+        text(name, width - 200, height - 40);
     }
 
     if (detector.isRunning && hasFace) {
@@ -112,7 +112,7 @@ function splashLine() {
     noFill();  // Don't draw a stroke around shapes
     strokeWeight((maxEmotion.value > 50 ? maxEmotion.value : 50) / 10);
     var ran_x1 = random(0, width);
-    var ran_y1= random(0, height);
+    var ran_y1 = random(0, height);
     var ran_x2 = ran_x1 + random(-300, 300);
     var ran_y2 = ran_y1 + random(-300, 300);
     var ran_x3 = ran_x2 + random(-300, 300);
@@ -152,3 +152,4 @@ function getColor() {
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
+
