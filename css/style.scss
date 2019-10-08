@@ -2,12 +2,11 @@
     margin: 0;
     font-family: 'Cabin Sketch', cursive;
     font-weight: 400;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 body {
     background-image: url("https://i.ibb.co/v4dY9bB/background2.jpg");
-
     //background-image: url("https://i.ibb.co/bgXY4mr/test.jpg");
 }
 
@@ -19,13 +18,32 @@ canvas {
     display: none;
 }
 
+#btns {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    .btn {
+        margin: 10px;
+    }
+}
+
 .btn {
     cursor: pointer;
+    z-index: 10;
     //background-color: antiquewhite;
     border-radius: 10px;
-    border: solid 10px transparent;
     padding: 0 20px;
-    border-image: url("https://i.ibb.co/MsDXPQQ/Button-frame.png");
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+        height: 90px;
+    }
+    span {
+        position: fixed;
+        margin: auto;
+    }
 }
 
 .affectivaTest {
@@ -143,17 +161,12 @@ canvas {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    * {
-        margin: 20px;
-    }
-
     input {
+        margin: 20px;
         background-color: rgba(0, 0, 0, 0);
         border: 0 solid;
-        border-bottom: 2px solid black;
+        border-bottom: 2px solid;
         z-index: 10;
-
         &:focus {
             outline: none;
         }
@@ -172,7 +185,7 @@ canvas {
 }
 
 #heptagon {
-    opacity: 1;
+    opacity: 0;
     position: fixed;
     width: 550px;
     height: 550px;
@@ -209,4 +222,13 @@ canvas {
         overflow: hidden;
         margin: auto;
     }
+}
+
+#loading-div {
+    display: none;
+    width: 100%;
+    height: 100%;
+    //display: flex;
+    align-items: center;
+    justify-content: center;
 }

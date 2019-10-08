@@ -24,12 +24,16 @@
 </head>
 
 <body>
+
+    <!--
+        
     <div class="affectiva-container">
         <div id="results">
         </div>
         <div id="results-max">
         </div>
     </div>
+    -->
 
     <div id="sketch-container">
         <div id="sketch-frame">
@@ -39,25 +43,70 @@
 
     <div id="UI-container">
         <div id="UI-frame">
+            <div id="loading-div">
+                <span id="loading">Initializing</span>
+                <script>
+                    var loadingText = "Initializing"
+                    var i = 0;
+                    setInterval(function () {
+
+                        $("#loading").append(".");
+                        i++;
+
+                        if (i == 4) {
+                            $("#loading").html(loadingText);
+                            i = 0;
+                        }
+
+                    }, 500);
+                </script>
+            </div>
+
             <div id="UI-div">
-                <p>Enter your name:</p>
-                <input id="name-input" type="text" >
-                <span class="btn" id="btn-start">Start</span>
+                <p>What's your name?</p>
+                <input id="name-input" type="text" placeholder="Name" autofocus>
+                <span class="btn" id="btn-start">
+                    <span>Start</span>
+                    <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+                </span>
 
                 <script>
-                    $('input').on('click', ()=> {
+                    $('input').on('click', () => {
                         $('input').focus();
                     })
+
+                    function resizeInput() {
+                        $(this).attr('size', $(this).val().length);
+                    }
+                    $('input')
+                        // event handler
+                        .keyup(resizeInput)
+                        // resize on page load
+                        .each(resizeInput);
                 </script>
             </div>
         </div>
     </div>
 
 
-    <span class="btn" id="btn-stop">Stop</span>
-    <span class="btn" id="btn-show">Show</span>
-    <span class="btn" id="btn-restart">Restart</span>
-    <span class="btn" id="btn-save">Save</span>
+    <div id="btns">
+        <span class="btn" id="btn-stop">
+            <span>Stop</span>
+            <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+        </span>
+        <span class="btn" id="btn-show">
+            <span>Show</span>
+            <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+        </span>
+        <span class="btn" id="btn-restart">
+            <span>Restart</span>
+            <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+        </span>
+        <span class="btn" id="btn-save">
+            <span>Save</span>
+            <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+        </span>
+    </div>
 
     <script>
 
@@ -80,11 +129,11 @@
         $('#btn-show').on('click', () => {
             if (!isShown) {
                 isShown = true;
-                $('#btn-show').text("Hide");
+                $('#btn-show span').text("Hide");
                 showAll();
             } else {
                 isShown = false;
-                $('#btn-show').text("Show");
+                $('#btn-show span').text("Show");
                 hideAll();
             }
         })
@@ -95,11 +144,11 @@
                 alert("Please enter your name! ");
             } else {
 
-                $("#btn-stop").show();
-                $("#btn-show").show();
+                $("#btn-stop").show().css("display", "flex");
+                $("#btn-show").show().css("display", "flex");
                 $('#results').html("Initializing... Please wait");
-                $('#UI-container').hide();
-                $()
+                $('#UI-div').hide();
+                $('#loading-div').show().css("display", "flex");
                 if (detector && !detector.isRunning) {
                     detector.start();
                 }
@@ -109,8 +158,8 @@
         $("#btn-stop").on("click", () => {
             if (detector && detector.isRunning) {
 
-                $("#btn-restart").show();
-                $("#btn-save").show();
+                $("#btn-restart").show().css("display", "flex");
+                $("#btn-save").show().css("display", "flex");
                 $("#btn-stop").hide();
                 $("#btn-show").hide();
                 sign = true;
@@ -167,7 +216,7 @@
                 emotion = [emoResults.anger, emoResults.surprise, emoResults.joy, emoResults.sadness, emoResults.contempt, emoResults.disgust, emoResults.fear];
                 p.clear();
                 p.background('rgba(0,0,0,0.7)');
-                p.translate(p.width * 0.5-100, p.height * 0.5);
+                p.translate(p.width * 0.5 - 100, p.height * 0.5);
                 p.polygon(0, 0, 60, 7);
             }
             p.polygon = (x, y, radius, npoints) => {
@@ -336,6 +385,7 @@
 
     detector.addEventListener("onInitializeSuccess", function () {
         //Display canvas instead of video feed because we want to draw the feature points on it
+        $('#loading-div').hide();
         $("#face_video").css("display", "relative").addClass("rectangular canvas");
 
     });

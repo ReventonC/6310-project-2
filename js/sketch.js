@@ -11,13 +11,13 @@ var color_surprise = ["#FFD600", "#FFE662", "#FDFFAF"];
 var color_sadness = ["#0044A9", "#5E8BCE", "#B9D5FF"];
 var color_fear = ["#7D00A9", "#A466BA", "#E0A9F3"];
 
-let font,
+let signfont,
     fontsize = 32;
 
 function preload() {
     // Ensure the .ttf or .otf font stored in the assets directory
     // is loaded before setup() and draw() are called
-    font = loadFont('assets/HomemadeApple-Regular.ttf');
+    signfont = loadFont('assets/HomemadeApple-Regular.ttf');
 }
 
 var myCanvas;
@@ -25,7 +25,7 @@ var myCanvas;
 function setup() {
     myCanvas = createCanvas($("#sketch-div").width(), $("#sketch-div").height());
     myCanvas.parent("sketch-div");
-    textFont(font);
+    textFont(signfont);
     textSize(fontsize);
     fill(0);
     background(255);
@@ -65,7 +65,7 @@ function draw() {
         sign = false;
         noStroke();
         fill(0);
-        textSize(18);
+        textSize(24);
         text(name, width - 200, height - 40);
     }
 
