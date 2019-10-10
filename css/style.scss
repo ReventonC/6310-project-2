@@ -29,6 +29,7 @@ canvas {
 }
 
 .btn {
+
     cursor: pointer;
     z-index: 10;
     margin: 10px;
@@ -43,6 +44,37 @@ canvas {
 
     img {
         height: 90px;
+    }
+
+    &:hover {
+        .regular {
+            display: none;
+        }
+
+        .active {
+            display: block;
+            opacity: 1;
+            animation: display-none-transition 0.3s both;
+        }
+
+        span {
+            color: white;
+            z-index: 100;
+        }
+    }
+
+    @keyframes display-none-transition {
+        0% {
+            opacity: 0;
+        }
+    }
+
+    .regular {
+        display: block;
+    }
+
+    .active {
+        display: none;
     }
 
     span {

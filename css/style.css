@@ -44,6 +44,35 @@ canvas {
   height: 90px;
 }
 
+.btn:hover .regular {
+  display: none;
+}
+
+.btn:hover .active {
+  display: block;
+  opacity: 1;
+  animation: display-none-transition 0.3s both;
+}
+
+.btn:hover span {
+  color: white;
+  z-index: 100;
+}
+
+@keyframes display-none-transition {
+  0% {
+    opacity: 0;
+  }
+}
+
+.btn .regular {
+  display: block;
+}
+
+.btn .active {
+  display: none;
+}
+
 .btn span {
   position: fixed;
   margin: auto;

@@ -21,10 +21,11 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://use.typekit.net/fpt0rzw.css">
     <link href="https://fonts.googleapis.com/css?family=Cabin+Sketch&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://i.ibb.co/jVfKTtn/facePalm.png" sizes="32x32" type="image/svg" />
 </head>
 
 <body>
-    <img id="background-img" src="https://i.ibb.co/yV3z3zN/Pj2-all.png" alt="Pj2-all" border="0">
+    <img id="background-img" src="https://i.ibb.co/PGH4xFG/background.png" alt="Pj2-all" border="0">
 
     <!--
     <div class="affectiva-container">
@@ -62,7 +63,7 @@
                 </script>
             </div>
 
-            <div id="noFace-div">  
+            <div id="noFace-div">
                 <span id="noFace">
                     No face detected!
                 </span>
@@ -73,7 +74,9 @@
                 <input id="name-input" type="text" placeholder="Name" autofocus maxlength="20">
                 <span class="btn" id="btn-start">
                     <span>Start</span>
-                    <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+                    <img class="active" src="https://i.ibb.co/gzvybWv/button-yellow.png(46 kB)" alt="button-yellow"
+                        border="0">
+                    <img class="regular" src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
                 </span>
 
                 <script>
@@ -101,19 +104,23 @@
     <div id="btns">
         <span class="btn" id="btn-stop">
             <span>Stop</span>
-            <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+            <img class="active" src="https://i.ibb.co/gzvybWv/button-yellow.png(46 kB)" alt="button-yellow" border="0">
+            <img class="regular" src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
         </span>
         <span class="btn" id="btn-show">
             <span>Show</span>
-            <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+            <img class="active" src="https://i.ibb.co/gzvybWv/button-yellow.png(46 kB)" alt="button-yellow" border="0">
+            <img class="regular" src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
         </span>
         <span class="btn" id="btn-restart">
             <span>Restart</span>
-            <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+            <img class="active" src="https://i.ibb.co/gzvybWv/button-yellow.png(46 kB)" alt="button-yellow" border="0">
+            <img class="regular" src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
         </span>
         <span class="btn" id="btn-save">
             <span>Save</span>
-            <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
+            <img class="active" src="https://i.ibb.co/gzvybWv/button-yellow.png(46 kB)" alt="button-yellow" border="0">
+            <img class="regular" src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
         </span>
     </div>
 
@@ -167,26 +174,34 @@
             }
         })
 
-        $("#btn-stop").on("click", () => {
-            if (detector && detector.isRunning) {
+        var isRun = false;
 
-                $("#btn-restart").show().css("display", "flex");
-                $("#btn-save").show().css("display", "flex");
-                $("#btn-stop").hide();
-                $("#btn-show").hide();
-                sign = true;
-                detector.removeEventListener();
-                detector.stop();
+        $("#btn-stop").on("click", () => {
+            if (!isSuccess) {
+            } else {
+                if ((detector && detector.isRunning) || isRun) {
+                    isRun = false;
+                    hideAll();
+                    $("#btn-restart").show().css("display", "flex");
+                    $("#btn-save").show().css("display", "flex");
+                    $("#btn-stop").hide();
+                    $("#btn-show").hide();
+                    sign = true;
+                    detector.removeEventListener();
+                    detector.stop();
+                }
             }
         })
 
         $("#btn-restart").on("click", () => {
-            $("#btn-stop").show().css("display", "flex");
+            isRun = true;
             $("#btn-restart").hide();
             $("#btn-show").show().css("display", "flex");
             $("#btn-save").hide();
             isShown = false;
             $('#btn-show span').text("Show");
+            $("#btn-stop").show().css("display", "flex");
+
             hideAll();
             detector.start();
             clear();
@@ -195,40 +210,39 @@
     </script>
 
     <div id="img-container">
-        <img src="https://i.ibb.co/ZMMKNcH/Oval-Frame-cat.png" class="oval cat" border="0">
+        <img src="https://i.ibb.co/3T3DY7z/Oval-Frame.png" class="oval cat" border="0">
         <div id="emoList" class="oval canvas"></div>
-        <img src="https://i.ibb.co/QCyN6Gr/Oval-Frame-frame.png" class="oval frame" border="0">
+        <img src="https://i.ibb.co/ryWgFQQ/Oval-Frame-frame.png" class="oval frame" border="0">
 
-        <img src="https://i.ibb.co/NSjR1VX/rectangular-cat.png" class="rectangular cat" border="0">
+        <img src="https://i.ibb.co/8ctrj4r/rectangular.png" class="rectangular cat" border="0">
         <div class="affectivaTest rectangular canvas" id="affdex_elements"></div>
-        <img src="https://i.ibb.co/1rqMjyH/rectangular-frame.png" class="rectangular frame" border="0">
+        <img src="https://i.ibb.co/D9kW3k1/rectangular-frame.png" class="rectangular frame" border="0">
 
-        <img src="https://i.ibb.co/CBdrWcL/Round-Frame-frame.png" class="round frame" border="0">
+        <img src="https://i.ibb.co/7R4LWHW/Round-Frame-frame.png" class="round frame" border="0">
         <div id="heptagon" class="round canvas"></div>
-        <img src="https://i.ibb.co/VCLJkjw/Round-Frame-cat.png" class="round cat" border="0">
+        <img src="https://i.ibb.co/7W5ZMQH/Round-Frame.png" class="round cat" border="0">
 
-        <img src="https://i.ibb.co/DGRrB95/line.png" id="line">
-        <img src="https://i.ibb.co/q717ntv/boy.png" id="boy" border="0">
-        <img src="https://i.ibb.co/GR3zyzs/girl.png" id="girl" border="0">
+        <img src="https://i.ibb.co/72XL7dD/guards.png" id="line">
+        <img src="https://i.ibb.co/m4ptnjD/boy.png" id="boy" border="0">
+        <img src="https://i.ibb.co/PZTKDbm/girl.png" id="girl" border="0">
     </div>
 
     <script>
         const TEXTSPREAD = 25;
+        var a, b, c, d, e, f, g;
         var emotionText = ["anger", "surprise", "joy", "sadness", "contempt", "disgust", "fear"];
         var strokeColor = ["#E40000", "#FFD600", "#FF7337", "#0044A9", "#878787", "#53995C", "#7D00A9"];
-
         // var strokeColor2 = ['red', 'yellow', 'orange', 'white', 'blue', 'purple', 'grey', 'green'];
         var hepx = 500;
         var hepy = 500;
         var heptagon = (p) => {
-            var tempArray = [];
-            var lineArray = [];
             p.preload = () => {
                 font = loadFont('assets/CabinSketch-Regular.ttf');
             }
             p.setup = () => {
                 p.createCanvas(hepx, hepy);
                 p.textFont(font);
+                p.frameRate(5);
                 p.strokeWeight(5);
             }
             p.draw = () => {
@@ -252,38 +266,7 @@
                 p.endShape(p.CLOSE);
                 //create data-based vis
                 var i = 0;
-                for (let an = 0; an < p.TWO_PI, i < npoints; an += angle) {
-                    let sxText = x + p.cos(an) * (radius + TEXTSPREAD);
-                    let syText = y + p.sin(an) * (radius + TEXTSPREAD);
-                    //p.noStroke();
-                    //p.textSize(16);
-                    //p.textAlign(p.CENTER, p.CENTER);
-                    //p.fill(strokeColor[i]);
-                    //p.text(emotionText[i], sxText, syText);
-
-                    //p.stroke(strokeColor[i]);
-                    let sx = x + p.cos(an) * radius;
-                    let sy = y + p.sin(an) * radius;
-                    // stroke(strokeColor[i]);
-                    //p.fill(strokeColor[i]);
-                    //p.line(sx * emotion[i] / 100, sy * emotion[i] / 100, 0, 0);
-                    tempArray[2 * i] = sx * emotion[i] / 100;
-                    tempArray[2 * i + 1] = sy * emotion[i] / 100;
-                    i++;
-                }
-                let count = 0;
-                for (let i = 0; i < npoints; i++) {
-                    if (tempArray[2 * i] != 0 || tempArray[2 * i + 1] != 0) {
-                        lineArray[count++] = tempArray[2 * i];
-                        lineArray[count++] = tempArray[2 * i + 1];
-                    }
-                }
-                for (let i = 0; i < lineArray.length / 2 + 4; i++) {
-                    p.stroke("rgba(0,0,0,0.5)");
-                    p.line(lineArray[i], lineArray[i + 1], lineArray[i + 2], lineArray[i + 3]);
-                    i++;
-                }
-                p.line(lineArray[0], lineArray[1], lineArray[lineArray.length - 2], lineArray[lineArray.length - 1]);
+                p.beginShape();
                 for (let an = 0; an < p.TWO_PI, i < npoints; an += angle) {
                     let sxText = x + p.cos(an) * (radius + TEXTSPREAD);
                     let syText = y + p.sin(an) * (radius + TEXTSPREAD);
@@ -292,23 +275,21 @@
                     p.textAlign(p.CENTER, p.CENTER);
                     p.fill(strokeColor[i]);
                     p.text(emotionText[i], sxText, syText);
-
                     p.stroke(strokeColor[i]);
                     let sx = x + p.cos(an) * radius;
                     let sy = y + p.sin(an) * radius;
                     // stroke(strokeColor[i]);
                     p.fill(strokeColor[i]);
                     p.line(sx * emotion[i] / 100, sy * emotion[i] / 100, 0, 0);
+                    i++;
+                    p.endShape(p.CLOSE);
                 }
             }
         }
-
         new p5(heptagon, document.getElementById("heptagon"));
-
         var emoList = (p) => {
             var x = 200;
             var y = 200;
-
             p.preload = () => {
                 font = loadFont('assets/CabinSketch-Regular.ttf');
             }
@@ -317,6 +298,7 @@
                 p.background('rgba(0,0,0,0.7)');
                 p.textFont(font);
                 p.textSize(30);
+                p.frameRate(5);
             }
             p.draw = () => {
                 p.clear();
@@ -342,10 +324,7 @@
                 p.text("Surprise: " + emoResults.surprise + "%", x, y + 6 * y_inc);
             }
         }
-
         new p5(emoList, document.getElementById("emoList"));
-
-
     </script>
 </body>
 
@@ -432,7 +411,10 @@
     //detector.detectAllEmojis();
     detector.detectAppearance.gender = true;
 
+    var isSuccess = false;
+
     detector.addEventListener("onInitializeSuccess", function () {
+        isSuccess = true;
         //Display canvas instead of video feed because we want to draw the feature points on it
         $('#loading-div').hide();
         $("#face_video").css("display", "relative").addClass("rectangular canvas");
