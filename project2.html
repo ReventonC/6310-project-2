@@ -24,9 +24,9 @@
 </head>
 
 <body>
+    <img id="background-img" src="https://i.ibb.co/yV3z3zN/Pj2-all.png" alt="Pj2-all" border="0">
 
     <!--
-        
     <div class="affectiva-container">
         <div id="results">
         </div>
@@ -62,9 +62,15 @@
                 </script>
             </div>
 
+            <div id="noFace-div">  
+                <span id="noFace">
+                    No face detected!
+                </span>
+            </div>
+
             <div id="UI-div">
                 <p>What's your name?</p>
-                <input id="name-input" type="text" placeholder="Name" autofocus>
+                <input id="name-input" type="text" placeholder="Name" autofocus maxlength="20">
                 <span class="btn" id="btn-start">
                     <span>Start</span>
                     <img src="https://i.ibb.co/j6qvHD4/Button-frame.png" alt="Button-frame" border="0">
@@ -74,9 +80,12 @@
                     $('input').on('click', () => {
                         $('input').focus();
                     })
+                    while ($('input').attr('size') <= 0) {
+                        $('input').attr('size', "4");
+                    }
 
                     function resizeInput() {
-                        $(this).attr('size', $(this).val().length);
+                        $(this).attr('size', $(this).val().length - 1);
                     }
                     $('input')
                         // event handler
@@ -111,7 +120,10 @@
     <script>
 
         $('#btn-save').on('click', () => {
-            save('myCanvas.jpg');
+            //save('myCanvas.jpg');
+            var d_save = document.querySelector("#sketch-div canvas").toDataURL("image/png");
+            var w_save = window.open('about:blank', 'image from canvas');
+            w_save.document.write("<img src='" + d_save + "' alt='from canvas'/>");
         })
 
         function showAll() {
@@ -169,6 +181,13 @@
         })
 
         $("#btn-restart").on("click", () => {
+            $("#btn-stop").show().css("display", "flex");
+            $("#btn-restart").hide();
+            $("#btn-show").show().css("display", "flex");
+            $("#btn-save").hide();
+            isShown = false;
+            $('#btn-show span').text("Show");
+            hideAll();
             detector.start();
             clear();
             setup();
@@ -195,7 +214,6 @@
 
     <script>
         const TEXTSPREAD = 25;
-        var a, b, c, d, e, f, g;
         var emotionText = ["anger", "surprise", "joy", "sadness", "contempt", "disgust", "fear"];
         var strokeColor = ["#E40000", "#FFD600", "#FF7337", "#0044A9", "#878787", "#53995C", "#7D00A9"];
 
@@ -203,13 +221,14 @@
         var hepx = 500;
         var hepy = 500;
         var heptagon = (p) => {
+            var tempArray = [];
+            var lineArray = [];
             p.preload = () => {
                 font = loadFont('assets/CabinSketch-Regular.ttf');
             }
             p.setup = () => {
                 p.createCanvas(hepx, hepy);
                 p.textFont(font);
-                p.frameRate(5);
                 p.strokeWeight(5);
             }
             p.draw = () => {
@@ -233,7 +252,38 @@
                 p.endShape(p.CLOSE);
                 //create data-based vis
                 var i = 0;
-                p.beginShape();
+                for (let an = 0; an < p.TWO_PI, i < npoints; an += angle) {
+                    let sxText = x + p.cos(an) * (radius + TEXTSPREAD);
+                    let syText = y + p.sin(an) * (radius + TEXTSPREAD);
+                    //p.noStroke();
+                    //p.textSize(16);
+                    //p.textAlign(p.CENTER, p.CENTER);
+                    //p.fill(strokeColor[i]);
+                    //p.text(emotionText[i], sxText, syText);
+
+                    //p.stroke(strokeColor[i]);
+                    let sx = x + p.cos(an) * radius;
+                    let sy = y + p.sin(an) * radius;
+                    // stroke(strokeColor[i]);
+                    //p.fill(strokeColor[i]);
+                    //p.line(sx * emotion[i] / 100, sy * emotion[i] / 100, 0, 0);
+                    tempArray[2 * i] = sx * emotion[i] / 100;
+                    tempArray[2 * i + 1] = sy * emotion[i] / 100;
+                    i++;
+                }
+                let count = 0;
+                for (let i = 0; i < npoints; i++) {
+                    if (tempArray[2 * i] != 0 || tempArray[2 * i + 1] != 0) {
+                        lineArray[count++] = tempArray[2 * i];
+                        lineArray[count++] = tempArray[2 * i + 1];
+                    }
+                }
+                for (let i = 0; i < lineArray.length / 2 + 4; i++) {
+                    p.stroke("rgba(0,0,0,0.5)");
+                    p.line(lineArray[i], lineArray[i + 1], lineArray[i + 2], lineArray[i + 3]);
+                    i++;
+                }
+                p.line(lineArray[0], lineArray[1], lineArray[lineArray.length - 2], lineArray[lineArray.length - 1]);
                 for (let an = 0; an < p.TWO_PI, i < npoints; an += angle) {
                     let sxText = x + p.cos(an) * (radius + TEXTSPREAD);
                     let syText = y + p.sin(an) * (radius + TEXTSPREAD);
@@ -249,16 +299,16 @@
                     // stroke(strokeColor[i]);
                     p.fill(strokeColor[i]);
                     p.line(sx * emotion[i] / 100, sy * emotion[i] / 100, 0, 0);
-                    i++;
-                    p.endShape(p.CLOSE);
                 }
             }
         }
+
         new p5(heptagon, document.getElementById("heptagon"));
 
         var emoList = (p) => {
             var x = 200;
             var y = 200;
+
             p.preload = () => {
                 font = loadFont('assets/CabinSketch-Regular.ttf');
             }
@@ -267,7 +317,6 @@
                 p.background('rgba(0,0,0,0.7)');
                 p.textFont(font);
                 p.textSize(30);
-                p.frameRate(5);
             }
             p.draw = () => {
                 p.clear();
@@ -390,8 +439,6 @@
 
     });
 
-
-
     detector.addEventListener("onImageResultsSuccess", function (faces, image, timestamp) {
         $('#results').html("");
         $('#results-max').html("");
@@ -399,6 +446,7 @@
         //a_log('#results', "Number of faces found: " + faces.length);
         if (faces.length > 0) {
             hasFace = true;
+            $("#noFace-div").hide();
             emoResults = percentEmotion(cleanEmotion(faces[0].emotions));
             findMax(cleanEmotion(faces[0].emotions));
             a_log('#results', "Emotions: " + JSON.stringify(cleanEmotion(faces[0].emotions), function (key, val) {
@@ -409,8 +457,10 @@
             findGender(faces[0]);
         } else {
             hasFace = false;
-            $('#results').html("No face detected");
+            $("#noFace-div").show().css("display", "flex");
+            //$('#results').html("No face detected");
         }
+
     });
     /*
     function setup() {

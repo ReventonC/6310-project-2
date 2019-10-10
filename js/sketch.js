@@ -29,7 +29,7 @@ function setup() {
     textSize(fontsize);
     fill(0);
     background(255);
-    frameRate(5);
+    frameRate(10);
 }
 
 function windowResized() {
@@ -37,7 +37,7 @@ function windowResized() {
 }
 
 function getColor(emotion) {
-    if (maxEmotion.value <= 10) return color("#FFFFFF");
+    if (maxEmotion.value <= 2) return color("#FFFFFF");
     switch (maxEmotion.emotion) {
         case "joy":
             return (maxEmotion.value > 70 ? color_joy[0] : maxEmotion.value > 40 ? color_joy[1] : color_joy[2]);
